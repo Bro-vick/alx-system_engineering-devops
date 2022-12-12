@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# This script configures the server to be logged in without a password
+
+Host *
+	PasswordAuthentication No
+	IdentityFile ~/.ssh/school
