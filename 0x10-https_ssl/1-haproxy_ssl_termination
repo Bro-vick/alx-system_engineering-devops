@@ -1,0 +1,27 @@
+defaults
+    log     global
+    mode    http
+    option  httplog
+
+frontend web-servers
+    bind *:80
+    default_backend app-servers
+
+backend app-servers
+    balance roundrobin
+    server 59841-web-01 35.153.255.177:80 check
+    server 59841-web-02 54.234.54.166:80 check
+
+#--brovick.tech params----begining
+frontend  brovick.tech-https-frontend
+	bind *:80
+	bind *:443 ssl crt /etc/ssl/certs/brovick.pem
+	mode http
+        default_backend brovick.tech-backend
+
+
+backend brovick.tech-backend
+        balance roundrobin
+        server 59841-web-01 35.153.255.177:80 check
+        server 59841-web-02 54.234.54.166:80 check
+# end of parameters
