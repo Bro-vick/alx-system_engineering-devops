@@ -1,0 +1,12 @@
+1. netstat -lpn - check what is listening
+2. sudo ufw status verbose - status of ufw
+3. sudo vim /etc/ufw/before.rules - file to copy the redirect commands
+4. copy the following into before.rules:
+#Redirect from port 8080 to 80
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
+
+5. sudo ufw allow 8080/tcp - allow port 8080/tcp
+6. sudo ufw reload - restart ufw
