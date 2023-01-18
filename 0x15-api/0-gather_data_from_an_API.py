@@ -1,19 +1,33 @@
 #!/usr/bin/python3
 '''Gather data from an API'''
-import requests
-from sys import argv
+
+import json
+import sys
+import urllib.request
+
+def get_todo_list(employee_id):
+    url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
+    response = urllib.request.urlopen(url)
+    todo_list = json.loads(response.read())
+    return todo_list
+
+def get_employee_name(employee_id):
+    url = f'https://jsonplaceholder.typicode.com/users/{employee_id}'
+    response = urllib.request.urlopen(url)
+    employee = json.loads(response.read())
+    return employee['name']
+
+def print_todo_list(employee_id):
+    todo_list = get_todo_list(employee_id)
+    employee_name = get_employee_name(employee_id)
+    done_tasks = [task for task in todo_list if task['completed']]
+    total_tasks = len(todo_list)
+    done_tasks_count = len(done_tasks)
+    print(f'Employee {employee_name} is done with tasks({done_tasks_count}/{total_tasks}):')
+    for task in done_tasks:
+        print(f'\t{task["title"]}')
 
 if __name__ == '__main__':
-    # Get employee response [used to get name in line 19]
-    endpoint = 'https://jsonplaceholder.typicode.com'
-    user_res = requests.get(endpoint + '/users/' + argv[1]).json()
+    employee_id = int(sys.argv[1])
+    print_todo_list(employee_id)
 
-    # this gets the total number of tasks [used to get len of all tasks in line 18]
-    todos = requests.get(endpoint + '/todos?userId=' + argv[1]).json()
-
-    # get number of completed tasks and their titles
-    titles_done = [todo['title'] for todo in todos if todo['completed']]
-
-    print('Employee {} is done with tasks({}/{}):'.format(user_res['name'], len(titles_done), len(todos)))
-    
-    [print('\t {}'.format(titles)) for title in titles_done]
