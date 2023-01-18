@@ -1,31 +1,39 @@
+#!/usr/bin/python3
+"""returns information for a given employee ID"""
 import csv
-import json
-import sys
-import urllib.request
+import requests
+from sys import argv
 
-def get_todo_list(employee_id):
-    url = 'https://jsonplaceholder.typicode.com/todos?userId={}'.format(employee_id)
-    response = urllib.request.urlopen(url)
-    todo_list = json.loads(response.read())
-    return todo_list
 
-def get_employee_name(employee_id):
-    url = 'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)
-    response = urllib.request.urlopen(url)
-    employee = json.loads(response.read())
-    return employee['name']
+def to_csv():
+    """return API data"""
+    users = requests.get("http://jsonplaceholder.typicode.com/users")
+    for user in users.json():
+        if user.get('id') == int(argv[1]):
+            USERNAME = (user.get('username'))
+            break
+    TASK_STATUS_TITLE = []
+    todos = requests.get("http://jsonplaceholder.typicode.com/todos")
+    for todo in todos.json():
+        if todo.get('userId') == int(argv[1]):
+            TASK_STATUS_TITLE.append((todo.get('completed'),
+                                      todo.get('title')))
 
-def export_todo_list_to_csv(employee_id):
-    todo_list = get_todo_list(employee_id)
-    employee_name = get_employee_name(employee_id)
-    csv_file = open('{}.csv'.format(employee_id), mode='w')
-    csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE'])
-    for task in todo_list:
-        csv_writer.writerow([employee_id, employee_name, task['completed'], task['title']])
-    csv_file.close()
+    """export to csv"""
+    filename = "{}.csv".format(argv[1])
+    with open(filename, "w", encoding='utf8') as csvfile:
+        fieldnames = ["USER_ID", "USERNAME",
+                      "TASK_COMPLETED_STATUS", "TASK_TITLE"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames,
+                                quoting=csv.QUOTE_ALL)
+        for task in TASK_STATUS_TITLE:
+            writer.writerow({"USER_ID": argv[1], "USERNAME": USERNAME,
+                             "TASK_COMPLETED_STATUS": task[0],
+                             "TASK_TITLE": task[1]})
 
-if __name__ == '__main__':
-    employee_id = int(sys.argv[1])
-    export_todo_list_to_csv(employee_id)
 
+if __name__ == "__main__":
+    if len(argv) > 1:
+        to_csv()
+    else:
+        print("You must add a UserId to select a file!")
