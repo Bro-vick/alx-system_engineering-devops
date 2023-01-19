@@ -28,3 +28,18 @@ Next, it makes a GET request to the "todos" endpoint, and loops through the retu
 Finally, it creates a new dictionary with the format {'ID': [{'task': 'task name', 'completed': True/False, 'username': 'username'}]}, and then saves this dictionary to a new JSON file with the name ID.json, by using json.dump() method of json module.
 
 It also has an if block at the end of the script, which checks if the user passed any argument, if not it will print "You must add a UserId!"
+
+# Task 3. Dictionary of list of dictionaries
+This script exports all todo data to json using the json and requests libraries.
+
+It first sets a BASE_URL variable to 'https://jsonplaceholder.typicode.com' which is the base endpoint of a mock REST API that returns placeholder data.
+
+Then, it uses the requests library to make a GET request to the '/users' endpoint of the API, and assigns the returned JSON data to the variable 'users'.
+
+It then opens a file named 'todo_all_employees.json' in write mode, and creates an empty dictionary named 'output'
+
+It then iterates through the list of users, for each user, it creates an empty list 'tasks' and for each todo item in the list of todos returned by making another GET request to '/todos' endpoint with the userId parameter set to the id of the current user, it appends a dictionary containing the username, task, and completed status of the task to the 'tasks' list.
+
+Then it adds the 'tasks' list to the 'output' dictionary using the user's id as the key.
+
+After iterating through all the users, it uses json.dump() function to dump the output dictionary into the opened file. This will write the contents of the 'output' dictionary to the 'todo_all_employees.json' file in json format.
