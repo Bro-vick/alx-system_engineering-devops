@@ -12,5 +12,6 @@ The root cause of the data breach was determined to be a vulnerability in the we
 
 This data breach was a significant event for us, and we take the security of our customers' information very seriously. We have taken all necessary steps to mitigate the damage and prevent similar incidents from happening in the future. We are committed to providing our customers with a secure and reliable financial service, and we will continue to invest in the best security practices and technologies to ensure the protection of our customers' information.
 
-**You can Read more on my blog through the link below:
-[blogpost](https://veekcodes.hashnode.dev/financial-services-website-postmortem)
+**You can Read more on my blog through the link below:**
+
+[click to read blogpost](https://veekcodes.hashnode.dev/financial-services-website-postmortem)
